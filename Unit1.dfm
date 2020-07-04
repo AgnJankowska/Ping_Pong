@@ -1,9 +1,9 @@
 object Form1: TForm1
-  Left = 230
-  Top = 80
+  Left = 191
+  Top = 99
   Width = 923
-  Height = 482
-  Caption = 'Form1'
+  Height = 483
+  Caption = 'PING PONG'
   Color = clBtnFace
   UseDockManager = True
   DockSite = True
@@ -13,6 +13,7 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  OnCreate = FormCreate
   OnKeyDown = FormKeyDown
   OnKeyUp = FormKeyUp
   PixelsPerInch = 96
@@ -3422,12 +3423,12 @@ object Form1: TForm1
   end
   object Score: TLabel
     Left = 632
-    Top = 168
+    Top = 176
     Width = 201
-    Height = 36
+    Height = 33
     Alignment = taCenter
     AutoSize = False
-    Caption = 'x'
+    Caption = '0 : 0'
     Font.Charset = EASTEUROPE_CHARSET
     Font.Color = clWindowText
     Font.Height = -23
@@ -4218,12 +4219,12 @@ object Form1: TForm1
   end
   object Actual_amount: TLabel
     Left = 632
-    Top = 304
+    Top = 312
     Width = 97
-    Height = 36
+    Height = 33
     Alignment = taCenter
     AutoSize = False
-    Caption = 'x'
+    Caption = '0'
     Font.Charset = EASTEUROPE_CHARSET
     Font.Color = clWindowText
     Font.Height = -23
@@ -4234,12 +4235,12 @@ object Form1: TForm1
   end
   object Record_amount: TLabel
     Left = 736
-    Top = 304
+    Top = 312
     Width = 97
-    Height = 36
+    Height = 33
     Alignment = taCenter
     AutoSize = False
-    Caption = 'x'
+    Caption = '0'
     Font.Charset = EASTEUROPE_CHARSET
     Font.Color = clWindowText
     Font.Height = -23
@@ -4247,6 +4248,53 @@ object Form1: TForm1
     Font.Style = [fsBold]
     ParentFont = False
     Transparent = True
+  end
+  object Label3: TLabel
+    Left = 120
+    Top = 96
+    Width = 361
+    Height = 57
+    Alignment = taCenter
+    AutoSize = False
+    Caption = 'PING - PONG'
+    Font.Charset = EASTEUROPE_CHARSET
+    Font.Color = clNavy
+    Font.Height = -48
+    Font.Name = 'Book Antiqua'
+    Font.Style = [fsBold]
+    ParentFont = False
+    Transparent = True
+  end
+  object Button1: TButton
+    Left = 184
+    Top = 176
+    Width = 233
+    Height = 65
+    Caption = 'NOWA GRA'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -31
+    Font.Name = 'Book Antiqua'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 0
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 184
+    Top = 256
+    Width = 233
+    Height = 65
+    Caption = 'NOWA GRA'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -31
+    Font.Name = 'Book Antiqua'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+    Visible = False
+    OnClick = Button2Click
   end
   object Timer_ball: TTimer
     Interval = 25
@@ -4256,30 +4304,36 @@ object Form1: TForm1
   end
   object Timer_Paddle1_up: TTimer
     Enabled = False
-    Interval = 20
+    Interval = 10
     OnTimer = Timer_Paddle1_upTimer
     Left = 48
     Top = 24
   end
   object Timer_Paddle1_down: TTimer
     Enabled = False
-    Interval = 20
+    Interval = 10
     OnTimer = Timer_Paddle1_downTimer
     Left = 80
     Top = 24
   end
   object Timer_Paddle2_up: TTimer
     Enabled = False
-    Interval = 20
+    Interval = 10
     OnTimer = Timer_Paddle2_upTimer
     Left = 112
     Top = 24
   end
   object Timer_Paddle2_down: TTimer
     Enabled = False
-    Interval = 20
+    Interval = 10
     OnTimer = Timer_Paddle2_downTimer
     Left = 144
+    Top = 24
+  end
+  object Timer_speed: TTimer
+    Interval = 7000
+    OnTimer = Timer_speedTimer
+    Left = 176
     Top = 24
   end
 end

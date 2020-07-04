@@ -45,6 +45,10 @@ __published:	// IDE-managed Components
         TImage *Image3;
         TLabel *Actual_amount;
         TLabel *Record_amount;
+        TTimer *Timer_speed;
+        TButton *Button1;
+        TButton *Button2;
+        TLabel *Label3;
         void __fastcall Timer_ballTimer(TObject *Sender);
         void __fastcall Timer_Paddle1_upTimer(TObject *Sender);
         void __fastcall Timer_Paddle1_downTimer(TObject *Sender);
@@ -54,6 +58,10 @@ __published:	// IDE-managed Components
           TShiftState Shift);
         void __fastcall Timer_Paddle2_downTimer(TObject *Sender);
         void __fastcall Timer_Paddle2_upTimer(TObject *Sender);
+        void __fastcall Timer_speedTimer(TObject *Sender);
+        void __fastcall FormCreate(TObject *Sender);
+        void __fastcall Button1Click(TObject *Sender);
+        void __fastcall Button2Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
