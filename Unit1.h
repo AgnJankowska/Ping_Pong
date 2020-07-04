@@ -25,7 +25,6 @@ __published:	// IDE-managed Components
         TImage *Speed_lvl5a;
         TLabel *Label1;
         TLabel *Label2;
-        TLabel *Score;
         TLabel *Label5;
         TImage *Speed_lvl2;
         TImage *Speed_lvl1;
@@ -39,9 +38,22 @@ __published:	// IDE-managed Components
         TTimer *Timer_Paddle2_down;
         TShape *Bonus_area;
         TImage *Image2;
-        TLabel *Label3;
-        TImage *Image1;
+        TLabel *Score;
         TLabel *Label4;
+        TLabel *Label6;
+        TImage *Image1;
+        TImage *Image3;
+        TLabel *Actual_amount;
+        TLabel *Record_amount;
+        void __fastcall Timer_ballTimer(TObject *Sender);
+        void __fastcall Timer_Paddle1_upTimer(TObject *Sender);
+        void __fastcall Timer_Paddle1_downTimer(TObject *Sender);
+        void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
+          TShiftState Shift);
+        void __fastcall FormKeyUp(TObject *Sender, WORD &Key,
+          TShiftState Shift);
+        void __fastcall Timer_Paddle2_downTimer(TObject *Sender);
+        void __fastcall Timer_Paddle2_upTimer(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
