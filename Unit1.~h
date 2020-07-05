@@ -56,6 +56,7 @@ __published:	// IDE-managed Components
         TImage *Speed_lvl5b;
         TTimer *Timer_extra_speed;
         TButton *Button3;
+        TTimer *Timer_bonuses;
         void __fastcall Timer_ballTimer(TObject *Sender);
         void __fastcall Timer_Paddle1_upTimer(TObject *Sender);
         void __fastcall Timer_Paddle1_downTimer(TObject *Sender);

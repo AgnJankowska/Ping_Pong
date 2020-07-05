@@ -14,7 +14,6 @@ int amount_of_punches_2 = 0;
 int amount_of_punches_record = 0;
 int player1_wins = 0;
 int player2_wins = 0;
-
 bool is_game_active = false;
 bool extra_speed = false;
 //---------------------------------------------------------------------------
@@ -28,10 +27,10 @@ void random_direction_of_ball()
    randomize();
    int set = random (4) + 1;
    switch(set){
-     case 1: {x=5;  y=5;}  break;
-     case 2: {x=5;  y=-5;} break;
-     case 3: {x=-5; y=5;}  break;
-     case 4: {x=-5; y=-5;} break;
+     case 1: {x=10;  y=10;}  break;
+     case 2: {x=10;  y=-10;} break;
+     case 3: {x=-10; y=10;}  break;
+     case 4: {x=-10; y=-10;} break;
    }
 }
 //---------------------------------------------------------------------------
@@ -239,32 +238,32 @@ void __fastcall TForm1::Timer_speedTimer(TObject *Sender){
        }
 
        else if (Speed_lvl4 -> Visible == true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl5 -> Visible = true;
        }
 
        else if (Speed_lvl3 -> Visible == true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl4 -> Visible = true;
        }
 
        else if (Speed_lvl2 -> Visible == true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl3 -> Visible = true;
        }
 
        else if (Speed_lvl1 -> Visible == true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl2 -> Visible = true;
        }
 
        else if (Speed_lvl1 -> Visible != true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl1 -> Visible = true;
        }
    }
@@ -306,36 +305,5 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action){
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::Timer_bonusesTimer(TObject *Sender)
-{
-   randomize();
-   int type_of_bonus = random (3) + 1;
-   int x_position = random(10);
-   int y_position = random(10);
 
-   switch(type_of_bonus){
-     case 1: {
-        if(Bonus1->Visible == false){
-           Bonus1->Left = Bonus_area->Left + ((Bonus_area->Width - Bonus1->Width)/10)* x_position;
-           Bonus1->Top = Bonus_area->Top + ((Bonus_area->Height - Bonus1->Height)/10)* y_position;
-           Bonus1->Visible = true;
-        }
-     }  break;
-     case 2: {
-        if(Bonus2->Visible == false){
-           Bonus2->Left = Bonus_area->Left + ((Bonus_area->Width - Bonus2->Width)/10)* x_position;
-           Bonus2->Top = Bonus_area->Top + ((Bonus_area->Height - Bonus2->Height)/10)* y_position;
-           Bonus2->Visible = true;
-        }
-     }  break;
-     case 3: {
-        if(Bonus3->Visible == false){
-           Bonus3->Left = Bonus_area->Left + ((Bonus_area->Width - Bonus3->Width)/10)* x_position;
-           Bonus3->Top = Bonus_area->Top + ((Bonus_area->Height - Bonus3->Height)/10)* y_position;
-           Bonus3->Visible = true;
-        }
-     }  break;
-   }
-}
-//---------------------------------------------------------------------------
 

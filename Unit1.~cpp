@@ -14,7 +14,7 @@ int amount_of_punches_2 = 0;
 int amount_of_punches_record = 0;
 int player1_wins = 0;
 int player2_wins = 0;
-
+int punching_player;
 bool is_game_active = false;
 bool extra_speed = false;
 //---------------------------------------------------------------------------
@@ -55,6 +55,7 @@ void end_of_game (){
       sndPlaySound ("Sounds/koniec.wav", SND_ASYNC);
       Form1->Timer_ball->Enabled = false;
       Form1->Timer_speed->Enabled = false;
+      Form1->Timer_bonuses->Enabled = false;
       Form1->Ball->Visible = false;
 
       Form1->Speed_lvl1 -> Visible = false;
@@ -85,7 +86,7 @@ void end_of_game (){
 
 void __fastcall TForm1::FormCreate(TObject *Sender)
 {
-   Application -> MessageBox ("WITAJ W GRZE PING PONG\n\n Zasady sterowania:\n Gracz 1: Litery A i Z\n Gracz 2: Strza³ka w górê i w dó³\n Odbicie œrodkiem rakietki powoduje przyspieszenie\n i zmianê k¹ta nachylenia pi³eczki.", "PING PONG", MB_OK);
+   Application -> MessageBox ("WITAJ W GRZE PING PONG\n\n Zasady sterowania (góra / dó³):\n Gracz 1: Litery A i Z\n Gracz 2: Strza³ka w górê i w dó³\n\n Odbicie œrodkiem rakietki powoduje przyspieszenie\n i zmianê k¹ta nachylenia pi³eczki.\n\n UDANEJ ROZGRYWKI!", "PING PONG", MB_OK);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button1Click(TObject *Sender)
@@ -104,9 +105,11 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
     random_direction_of_ball();
     Timer_ball->Enabled = true;
     Timer_speed->Enabled = true;
+    Timer_bonuses->Enabled = true;
     amount_of_punches_1 = 0;
     amount_of_punches_2 = 0;
     Actual_amount -> Caption = "0";
+    punching_player = 0;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
@@ -142,6 +145,7 @@ void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
        Ball->Left = Paddle1->Left+Paddle1->Width;
        if(extra_speed==false) extra_speed_on();
        else x = -x;
+       punching_player = 1;
     }
 
     //odbicie 1 gracza
@@ -153,6 +157,7 @@ void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
        Ball->Left = Paddle1->Left+Paddle1->Width;
        amount_of_punches_1++;
        Actual_amount -> Caption = amount_of_punches_1 + amount_of_punches_2;
+       punching_player = 1;
     }
 
     //skucha 1 gracza
@@ -171,6 +176,7 @@ void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
        Ball->Left = Paddle2->Left - Ball->Width ;
        if(extra_speed==false) extra_speed_on();
        else x = -x;
+       punching_player = 2;
     }
 
     //odbicie 2 gracza
@@ -182,6 +188,7 @@ void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
        Ball->Left = Paddle2->Left - Ball->Width ;
        amount_of_punches_2++;
        Actual_amount -> Caption = amount_of_punches_1+amount_of_punches_2;
+       punching_player = 2;
     }
 
     //skucha 2 gracza
@@ -303,4 +310,6 @@ void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action){
    }
 }
 //---------------------------------------------------------------------------
+
+
 
