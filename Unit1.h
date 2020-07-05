@@ -49,6 +49,17 @@ __published:	// IDE-managed Components
         TButton *Button1;
         TButton *Button2;
         TLabel *Label3;
+        TImage *Speed_lvl1b;
+        TImage *Speed_lvl2b;
+        TImage *Speed_lvl3b;
+        TImage *Speed_lvl4b;
+        TImage *Speed_lvl5b;
+        TTimer *Timer_extra_speed;
+        TButton *Button3;
+        TImage *Bonus1;
+        TImage *Bonus2;
+        TImage *Bonus3;
+        TTimer *Timer_bonuses;
         void __fastcall Timer_ballTimer(TObject *Sender);
         void __fastcall Timer_Paddle1_upTimer(TObject *Sender);
         void __fastcall Timer_Paddle1_downTimer(TObject *Sender);
@@ -62,6 +73,10 @@ __published:	// IDE-managed Components
         void __fastcall FormCreate(TObject *Sender);
         void __fastcall Button1Click(TObject *Sender);
         void __fastcall Button2Click(TObject *Sender);
+        void __fastcall Timer_extra_speedTimer(TObject *Sender);
+        void __fastcall Button3Click(TObject *Sender);
+        void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+        void __fastcall Timer_bonusesTimer(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);

@@ -7,8 +7,8 @@
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TForm1 *Form1;
-float x=5;
-float y=5;
+float x;
+float y;
 int amount_of_punches_1 = 0;
 int amount_of_punches_2 = 0;
 int amount_of_punches_record = 0;
@@ -16,10 +16,99 @@ int player1_wins = 0;
 int player2_wins = 0;
 
 bool is_game_active = false;
+bool extra_speed = false;
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
 {
+}
+//---------------------------------------------------------------------------
+void random_direction_of_ball()
+{
+   randomize();
+   int set = random (4) + 1;
+   switch(set){
+     case 1: {x=5;  y=5;}  break;
+     case 2: {x=5;  y=-5;} break;
+     case 3: {x=-5; y=5;}  break;
+     case 4: {x=-5; y=-5;} break;
+   }
+}
+//---------------------------------------------------------------------------
+void extra_speed_on() {
+      extra_speed = true;
+      Form1->Timer_extra_speed -> Enabled = true;
+      Form1->Timer_speed -> Enabled = false;
+
+      Form1->Speed_lvl1b -> Visible = true;
+      Form1->Speed_lvl2b -> Visible = true;
+      Form1->Speed_lvl3b -> Visible = true;
+      Form1->Speed_lvl4b -> Visible = true;
+      Form1->Speed_lvl5b -> Visible = true;
+
+      sndPlaySound ("Sounds/premie.wav", SND_ASYNC);
+      x = -1.6*x;
+      y = 1.3*y;
+}
+//---------------------------------------------------------------------------
+void end_of_game (){
+      sndPlaySound ("Sounds/koniec.wav", SND_ASYNC);
+      Form1->Timer_ball->Enabled = false;
+      Form1->Timer_speed->Enabled = false;
+      Form1->Timer_bonuses->Enabled = false;
+      Form1->Ball->Visible = false;
+
+      Form1->Speed_lvl1 -> Visible = false;
+      Form1->Speed_lvl2 -> Visible = false;
+      Form1->Speed_lvl3 -> Visible = false;
+      Form1->Speed_lvl4 -> Visible = false;
+      Form1->Speed_lvl5 -> Visible = false;
+      Form1->Speed_lvl1b -> Visible = false;
+      Form1->Speed_lvl2b -> Visible = false;
+      Form1->Speed_lvl3b -> Visible = false;
+      Form1->Speed_lvl4b -> Visible = false;
+      Form1->Speed_lvl5b -> Visible = false;
+
+      Form1->Label3->Visible = true;
+      Form1->Label3->Font->Size = 18;
+
+      Form1->Button1->Visible = true;
+      Form1->Button1->Caption = "JESZCZE RAZ";
+      Form1->Button2->Visible = true;
+      Form1->Button2->Caption = "NOWA GRA";
+      Form1->Button3->Visible = true;
+
+      amount_of_punches_record = amount_of_punches_1 + amount_of_punches_2;
+      if (StrToInt(Form1->Record_amount->Caption) < amount_of_punches_record)
+      Form1->Record_amount->Caption = IntToStr(amount_of_punches_record);
+      Form1->Score -> Caption = IntToStr(player1_wins) + " : " + IntToStr(player2_wins);
+}
+
+void __fastcall TForm1::FormCreate(TObject *Sender)
+{
+   Application -> MessageBox ("WITAJ W GRZE PING PONG\n\n Zasady sterowania (góra / dó³):\n Gracz 1: Litery A i Z\n Gracz 2: Strza³ka w górê i w dó³\n\n Odbicie œrodkiem rakietki powoduje przyspieszenie\n i zmianê k¹ta nachylenia pi³eczki.\n\n UDANEJ ROZGRYWKI!", "PING PONG", MB_OK);
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button1Click(TObject *Sender)
+{
+    is_game_active = true;
+
+    Ball->Left = 290;
+    Ball->Top = 185;
+    Ball->Visible = true;
+
+    Paddle1->Left = 16;
+    Paddle1->Top = 128;
+    Paddle2->Left =568;
+    Paddle2->Top = 128;
+
+    random_direction_of_ball();
+    Timer_ball->Enabled = true;
+    Timer_speed->Enabled = true;
+    Timer_bonuses->Enabled = true;
+    amount_of_punches_1 = 0;
+    amount_of_punches_2 = 0;
+    Actual_amount -> Caption = "0";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
@@ -27,88 +116,81 @@ void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
     Label3->Visible = false;
     Button1->Visible = false;
     Button2->Visible = false;
+    Button3->Visible = false;
 
-    Ball -> Left += x;
-    Ball -> Top += y;
+    Ball->Left += x;
+    Ball->Top += y;
 
     //odbij od górnej œciany
-    if(Ball->Top <= Game_background->Top){
+    if(Ball->Top < Game_background->Top){
       sndPlaySound ("Sounds/odbicie.wav", SND_ASYNC );
       y = -y;
+      Ball->Top = Game_background->Top;
     }
 
     //odbij od dolnej œciany
-    if(Ball->Top - Game_background->Height + Ball->Height >= Game_background->Top){
+    if(Ball->Top + Ball->Height > Game_background->Top + Game_background->Height -5){
       sndPlaySound ("Sounds/odbicie.wav", SND_ASYNC );
       y = -y;
+      Ball->Top = Game_background->Top + Game_background->Height - Ball->Height;
+    }
+
+    //odbicie 1 gracza srodkiem
+    if((Ball->Left < Paddle1->Left + Paddle1->Width) &&
+            (Ball->Top + Ball->Height/2 >= Paddle1->Top + Paddle1->Height/2-6) &&
+            (Ball->Top + Ball->Height/2 <= Paddle1->Top + Paddle1->Height/2+6)){
+       amount_of_punches_1++;
+       Actual_amount -> Caption = amount_of_punches_1 + amount_of_punches_2;
+       Ball->Left = Paddle1->Left+Paddle1->Width;
+       if(extra_speed==false) extra_speed_on();
+       else x = -x;
+    }
+
+    //odbicie 1 gracza
+    else if((Ball->Left < Paddle1->Left + Paddle1->Width) &&
+            (Ball->Top + Ball->Height/2 >= Paddle1->Top) &&
+            (Ball->Top - Ball->Height/2 <= Paddle1->Top + Paddle1->Height)){
+       sndPlaySound ("Sounds/odbicie.wav", SND_ASYNC);
+       x = -x;
+       Ball->Left = Paddle1->Left+Paddle1->Width;
+       amount_of_punches_1++;
+       Actual_amount -> Caption = amount_of_punches_1 + amount_of_punches_2;
     }
 
     //skucha 1 gracza
-    if(Ball->Left < Paddle1->Left + Paddle1->Width/2){
-      sndPlaySound ("Sounds/koniec.wav", SND_ASYNC);
-      Timer_ball->Enabled = false;
-      Timer_speed->Enabled = false;
-      Ball->Visible= false;
+    else if(Ball->Left < Paddle1->Left + Paddle1->Width/2){
+       Label3->Caption = "Punkt dla gracza nr 2";
+       player2_wins++;
+       end_of_game();
+    }
 
-      Label3->Visible = true;
-      Label3->Font->Size = 18;
-      Label3->Caption = "Punkt dla gracza nr 2";
-      player2_wins++;
+    //odbicie 2 gracza srodkiem
+    if((Ball->Left + Ball->Width > Paddle2->Left) &&
+            (Ball->Top + Ball->Height/2 >= Paddle2->Top + Paddle2->Height/2-6) &&
+            (Ball->Top + Ball->Height/2 <= Paddle2->Top + Paddle2->Height/2+6)){
+       amount_of_punches_2++;
+       Actual_amount -> Caption = amount_of_punches_1 + amount_of_punches_2;
+       Ball->Left = Paddle2->Left - Ball->Width ;
+       if(extra_speed==false) extra_speed_on();
+       else x = -x;
+    }
 
-      Button1->Visible = true;
-      Button1->Caption = "JESZCZE RAZ";
-      Button2->Visible = true;
-      Button2->Caption = "NOWA GRA";
-
-      amount_of_punches_record = amount_of_punches_1 + amount_of_punches_2;
-      if (StrToInt(Record_amount->Caption) < amount_of_punches_record)
-      Record_amount->Caption = IntToStr(amount_of_punches_record);
-
-      Score -> Caption = IntToStr(player1_wins) + " : " + IntToStr(player2_wins);
-   }
-
-    //odbicie 1 gracza
-    else if ((Ball->Left <= Paddle1->Left + Paddle1->Width) &&
-            (Ball->Top + Ball->Height/2 > Paddle1->Top) &&
-            (Ball->Top - Ball->Height/2 < Paddle1->Top + Paddle1->Height)){
+    //odbicie 2 gracza
+    else if((Ball->Left + Ball->Width > Paddle2->Left) &&
+             (Ball->Top + Ball->Height/2>= Paddle2->Top) &&
+             (Ball->Top - Ball->Height/2<= Paddle2->Top + Paddle2->Height)){
        sndPlaySound ("Sounds/odbicie.wav", SND_ASYNC);
        x = -x;
-       amount_of_punches_1++;
+       Ball->Left = Paddle2->Left - Ball->Width ;
+       amount_of_punches_2++;
        Actual_amount -> Caption = amount_of_punches_1+amount_of_punches_2;
     }
 
     //skucha 2 gracza
-    if(Ball->Left + Ball->Width > Paddle2->Left + Paddle2->Width){
-       sndPlaySound ("Sounds/koniec.wav", SND_ASYNC);
-       Timer_ball->Enabled = false;
-       Timer_speed->Enabled = false;
-       Ball->Visible= false;
-
-       Label3->Visible = true;
-       Label3->Font->Size = 18;
+    else if(Ball->Left + Ball->Width > Paddle2->Left + Paddle2->Width){
        Label3->Caption = "Punkt dla gracza nr 1";
        player1_wins++;
-
-       Button1->Visible = true;
-       Button1->Caption = "JESZCZE RAZ";
-       Button2->Visible = true;
-       Button2->Caption = "NOWA GRA";
-
-       amount_of_punches_record = amount_of_punches_1 + amount_of_punches_2;
-       if (StrToInt(Record_amount->Caption) < amount_of_punches_record)
-       Record_amount->Caption = IntToStr(amount_of_punches_record);
-
-       Score -> Caption = IntToStr(player1_wins) + " : " + IntToStr(player2_wins);
-    }
-
-    //odbicie 2 gracza
-    else if ((Ball->Left + Ball->Width >= Paddle2->Left) &&
-             (Ball->Top + Ball->Height/2> Paddle2->Top) &&
-             (Ball->Top - Ball->Height/2< Paddle2->Top + Paddle2->Height)){
-       sndPlaySound ("Sounds/odbicie.wav", SND_ASYNC);
-       x = -x;
-       amount_of_punches_2++;
-       Actual_amount -> Caption = amount_of_punches_1+amount_of_punches_2;
+       end_of_game();
     }
   }
 }
@@ -151,68 +233,41 @@ void __fastcall TForm1::FormKeyUp(TObject *Sender, WORD &Key,
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Timer_speedTimer(TObject *Sender){
    if(is_game_active){
-     if (Speed_lvl4 -> Visible == true){
-       x = x*1.15;
-       y = y*1.15;
-       Speed_lvl5 -> Visible = true;
-     }
+       if (Speed_lvl5 -> Visible == true){
+         x = x;
+         y = y;
+       }
 
-     else if (Speed_lvl3 -> Visible == true){
-       x = x*1.15;
-       y = y*1.15;
-       Speed_lvl4 -> Visible = true;
-     }
+       else if (Speed_lvl4 -> Visible == true){
+         x = x*1.13;
+         y = y*1.13;
+         Speed_lvl5 -> Visible = true;
+       }
 
-     else if (Speed_lvl2 -> Visible == true){
-       x = x*1.2;
-       y = y*1.2;
-       Speed_lvl3 -> Visible = true;
-     }
+       else if (Speed_lvl3 -> Visible == true){
+         x = x*1.13;
+         y = y*1.13;
+         Speed_lvl4 -> Visible = true;
+       }
 
-     else if (Speed_lvl1 -> Visible == true){
-       x = x*1.2;
-       y = y*1.2;
-       Speed_lvl2 -> Visible = true;
-     }
+       else if (Speed_lvl2 -> Visible == true){
+         x = x*1.13;
+         y = y*1.13;
+         Speed_lvl3 -> Visible = true;
+       }
 
-     else if (Speed_lvl1 -> Visible != true){
-       x = x*1.2;
-       y = y*1.2;
-       Speed_lvl1 -> Visible = true;
-     }
+       else if (Speed_lvl1 -> Visible == true){
+         x = x*1.13;
+         y = y*1.13;
+         Speed_lvl2 -> Visible = true;
+       }
+
+       else if (Speed_lvl1 -> Visible != true){
+         x = x*1.13;
+         y = y*1.13;
+         Speed_lvl1 -> Visible = true;
+       }
    }
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::FormCreate(TObject *Sender)
-{
-   Application -> MessageBox ("WITAJ W GRZE PING PONG\n\n Zasady sterowania:\n Gracz 1: Litery A i Z\n Gracz 2: Strza³ka w górê i w dó³", "PING PONG", MB_OK);
-}
-//---------------------------------------------------------------------------
-void __fastcall TForm1::Button1Click(TObject *Sender)
-{
-    is_game_active = true;
-
-    Ball->Left = 290;
-    Ball->Top = 185;
-    Ball->Visible = true;
-
-    Paddle1->Left = 16;
-    Paddle1->Top = 128;
-    Paddle2->Left =568;
-    Paddle2->Top = 128;
-
-    Speed_lvl1 -> Visible = false;
-    Speed_lvl2 -> Visible = false;
-    Speed_lvl3 -> Visible = false;
-    Speed_lvl4 -> Visible = false;
-    Speed_lvl5 -> Visible = false;
-
-    x=5; y=5;
-    Timer_ball->Enabled = true;
-    Timer_speed->Enabled = true;
-    amount_of_punches_1 = 0;
-    amount_of_punches_2 = 0;
-    Actual_amount -> Caption = "0";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button2Click(TObject *Sender)
@@ -222,6 +277,65 @@ void __fastcall TForm1::Button2Click(TObject *Sender)
     Score -> Caption = "0 : 0";
     player1_wins=0;
     player2_wins=0;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Timer_extra_speedTimer(TObject *Sender){
+      x = x / 1.6;
+      y = y / 1.3;
+      Speed_lvl1b -> Visible = false;
+      Speed_lvl2b -> Visible = false;
+      Speed_lvl3b -> Visible = false;
+      Speed_lvl4b -> Visible = false;
+      Speed_lvl5b -> Visible = false;
+      Timer_speed -> Enabled = true;
+      Timer_extra_speed -> Enabled = false;
+      extra_speed = false;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button3Click(TObject *Sender){
+   if(Application -> MessageBox ("Czy na pewno zakoñczyæ?", "PotwierdŸ", MB_YESNO | MB_ICONQUESTION) == IDYES){
+      Application -> Terminate();
+   }
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action){
+   if(Application -> MessageBox ("Czy na pewno zakoñczyc?", "PotwierdŸ" , MB_YESNO | MB_ICONQUESTION) == IDNO){
+        Action = caNone;
+   }
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Timer_bonusesTimer(TObject *Sender)
+{
+   randomize();
+   int type_of_bonus = random (3) + 1;
+   int x_position = random(10);
+   int y_position = random(10);
+
+   switch(type_of_bonus){
+     case 1: {
+        if(Bonus1->Visible == false){
+           Bonus1->Left = Bonus_area->Left + ((Bonus_area->Width - Bonus1->Width)/10)* x_position;
+           Bonus1->Top = Bonus_area->Top + ((Bonus_area->Height - Bonus1->Height)/10)* y_position;
+           Bonus1->Visible = true;
+        }
+     }  break;
+     case 2: {
+        if(Bonus2->Visible == false){
+           Bonus2->Left = Bonus_area->Left + ((Bonus_area->Width - Bonus2->Width)/10)* x_position;
+           Bonus2->Top = Bonus_area->Top + ((Bonus_area->Height - Bonus2->Height)/10)* y_position;
+           Bonus2->Visible = true;
+        }
+     }  break;
+     case 3: {
+        if(Bonus3->Visible == false){
+           Bonus3->Left = Bonus_area->Left + ((Bonus_area->Width - Bonus3->Width)/10)* x_position;
+           Bonus3->Top = Bonus_area->Top + ((Bonus_area->Height - Bonus3->Height)/10)* y_position;
+           Bonus3->Visible = true;
+        }
+     }  break;
+   }
 }
 //---------------------------------------------------------------------------
 
