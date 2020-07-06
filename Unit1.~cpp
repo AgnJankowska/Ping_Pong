@@ -14,7 +14,6 @@ int amount_of_punches_2 = 0;
 int amount_of_punches_record = 0;
 int player1_wins = 0;
 int player2_wins = 0;
-int punching_player;
 bool is_game_active = false;
 bool extra_speed = false;
 //---------------------------------------------------------------------------
@@ -28,10 +27,10 @@ void random_direction_of_ball()
    randomize();
    int set = random (4) + 1;
    switch(set){
-     case 1: {x=5;  y=5;}  break;
-     case 2: {x=5;  y=-5;} break;
-     case 3: {x=-5; y=5;}  break;
-     case 4: {x=-5; y=-5;} break;
+     case 1: {x=10;  y=10;}  break;
+     case 2: {x=10;  y=-10;} break;
+     case 3: {x=-10; y=10;}  break;
+     case 4: {x=-10; y=-10;} break;
    }
 }
 //---------------------------------------------------------------------------
@@ -91,8 +90,6 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
-    is_game_active = true;
-
     Ball->Left = 290;
     Ball->Top = 185;
     Ball->Visible = true;
@@ -102,22 +99,43 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
     Paddle2->Left =568;
     Paddle2->Top = 128;
 
+    Button1->Visible = false;
+    Button2->Visible = false;
+    Button3->Visible = false;
+
+    Label3->Visible=true;
+    Label3->Font->Size = 36;
+
+    Label3->Caption="3...";
+    Application -> ProcessMessages();
+    Sleep(1000);
+
+    Label3->Caption="2...";
+    Application -> ProcessMessages();
+    Sleep(1000);
+
+    Label3->Caption="1...";
+    Application -> ProcessMessages();
+    Sleep(1000);
+
+    Label3->Caption="START";
+    Application -> ProcessMessages();
+    Sleep(1000);
+    Label3->Visible = false;
+
+    is_game_active = true;
     random_direction_of_ball();
+
     Timer_ball->Enabled = true;
     Timer_speed->Enabled = true;
     Timer_bonuses->Enabled = true;
     amount_of_punches_1 = 0;
     amount_of_punches_2 = 0;
     Actual_amount -> Caption = "0";
-    punching_player = 0;
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
   if(is_game_active){
-    Label3->Visible = false;
-    Button1->Visible = false;
-    Button2->Visible = false;
-    Button3->Visible = false;
 
     Ball->Left += x;
     Ball->Top += y;
@@ -145,7 +163,6 @@ void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
        Ball->Left = Paddle1->Left+Paddle1->Width;
        if(extra_speed==false) extra_speed_on();
        else x = -x;
-       punching_player = 1;
     }
 
     //odbicie 1 gracza
@@ -157,7 +174,6 @@ void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
        Ball->Left = Paddle1->Left+Paddle1->Width;
        amount_of_punches_1++;
        Actual_amount -> Caption = amount_of_punches_1 + amount_of_punches_2;
-       punching_player = 1;
     }
 
     //skucha 1 gracza
@@ -176,7 +192,6 @@ void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
        Ball->Left = Paddle2->Left - Ball->Width ;
        if(extra_speed==false) extra_speed_on();
        else x = -x;
-       punching_player = 2;
     }
 
     //odbicie 2 gracza
@@ -188,7 +203,6 @@ void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
        Ball->Left = Paddle2->Left - Ball->Width ;
        amount_of_punches_2++;
        Actual_amount -> Caption = amount_of_punches_1+amount_of_punches_2;
-       punching_player = 2;
     }
 
     //skucha 2 gracza
@@ -244,32 +258,32 @@ void __fastcall TForm1::Timer_speedTimer(TObject *Sender){
        }
 
        else if (Speed_lvl4 -> Visible == true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl5 -> Visible = true;
        }
 
        else if (Speed_lvl3 -> Visible == true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl4 -> Visible = true;
        }
 
        else if (Speed_lvl2 -> Visible == true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl3 -> Visible = true;
        }
 
        else if (Speed_lvl1 -> Visible == true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl2 -> Visible = true;
        }
 
        else if (Speed_lvl1 -> Visible != true){
-         x = x*1.13;
-         y = y*1.13;
+         x = x*1.18;
+         y = y*1.18;
          Speed_lvl1 -> Visible = true;
        }
    }

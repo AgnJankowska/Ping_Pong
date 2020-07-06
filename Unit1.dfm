@@ -1,5 +1,5 @@
 object Form1: TForm1
-  Left = 409
+  Left = 375
   Top = 222
   BorderStyle = bsToolWindow
   Caption = 'PING PONG'

@@ -90,8 +90,6 @@ void __fastcall TForm1::FormCreate(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
-    is_game_active = true;
-
     Ball->Left = 290;
     Ball->Top = 185;
     Ball->Visible = true;
@@ -101,21 +99,53 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
     Paddle2->Left =568;
     Paddle2->Top = 128;
 
-    random_direction_of_ball();
-    Timer_ball->Enabled = true;
-    Timer_speed->Enabled = true;
-    Timer_bonuses->Enabled = true;
+    Button1->Visible = false;
+    Button2->Visible = false;
+    Button3->Visible = false;
+
     amount_of_punches_1 = 0;
     amount_of_punches_2 = 0;
     Actual_amount -> Caption = "0";
+
+    Label3->Visible=true;
+    Label3->Font->Size = 36;
+
+    Label3->Caption="3...";
+    Application -> ProcessMessages();
+    Sleep(1000);
+
+    Label3->Caption="2...";
+    Application -> ProcessMessages();
+    Sleep(1000);
+
+    Label3->Caption="1...";
+    Application -> ProcessMessages();
+    Sleep(1000);
+
+    Label3->Caption="START";
+    Application -> ProcessMessages();
+    Sleep(1000);
+    Label3->Visible = false;
+
+    is_game_active = true;
+    random_direction_of_ball();
+
+    Timer_ball->Enabled = true;
+    Timer_speed->Enabled = true;
+    Timer_bonuses->Enabled = true;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+    Score -> Caption = "0 : 0";
+    player1_wins=0;
+    player2_wins=0;
+    Record_amount -> Caption = "0";
+    Button1->Click();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Timer_ballTimer(TObject *Sender){
   if(is_game_active){
-    Label3->Visible = false;
-    Button1->Visible = false;
-    Button2->Visible = false;
-    Button3->Visible = false;
 
     Ball->Left += x;
     Ball->Top += y;
@@ -269,16 +299,6 @@ void __fastcall TForm1::Timer_speedTimer(TObject *Sender){
    }
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Button2Click(TObject *Sender)
-{
-    Button1->Click();
-    Record_amount -> Caption = "0";
-    Score -> Caption = "0 : 0";
-    player1_wins=0;
-    player2_wins=0;
-}
-//---------------------------------------------------------------------------
-
 void __fastcall TForm1::Timer_extra_speedTimer(TObject *Sender){
       x = x / 1.6;
       y = y / 1.3;

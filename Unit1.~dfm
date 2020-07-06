@@ -1,5 +1,5 @@
 object Form1: TForm1
-  Left = 409
+  Left = 375
   Top = 222
   BorderStyle = bsToolWindow
   Caption = 'PING PONG'
@@ -5112,28 +5112,28 @@ object Form1: TForm1
   end
   object Timer_Paddle1_up: TTimer
     Enabled = False
-    Interval = 10
+    Interval = 6
     OnTimer = Timer_Paddle1_upTimer
     Left = 48
     Top = 24
   end
   object Timer_Paddle1_down: TTimer
     Enabled = False
-    Interval = 10
+    Interval = 6
     OnTimer = Timer_Paddle1_downTimer
     Left = 80
     Top = 24
   end
   object Timer_Paddle2_up: TTimer
     Enabled = False
-    Interval = 10
+    Interval = 6
     OnTimer = Timer_Paddle2_upTimer
     Left = 112
     Top = 24
   end
   object Timer_Paddle2_down: TTimer
     Enabled = False
-    Interval = 10
+    Interval = 6
     OnTimer = Timer_Paddle2_downTimer
     Left = 144
     Top = 24
