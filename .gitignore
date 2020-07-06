@@ -1,6 +1,7 @@
-*.~brp
-*.obj
-*.tds
-*.~cpp
-*.~dfm
-*.~h
+Project1.~brp
+Project1.obj
+Project1.tds
+Unit1.~cpp
+Unit1.~dfm
+Unit1.~h
+Unit1.obj
